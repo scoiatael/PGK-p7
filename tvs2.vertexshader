@@ -1,0 +1,16 @@
+#version 330 core
+
+layout(location = 0) in vec3 vertexPosition;
+uniform mat4 MVP;
+
+out vec3 height;
+
+void main()
+{	
+  vec4 temp =  MVP * vec4(vec3(vertexPosition.x*10, vertexPosition.y*10,vertexPosition.z), 1.0);
+  float R = 64000.0;
+  float N = R/sqrt(1-pow(cos(temp.x),2));
+  gl_Position = vec4((N+temp.z)*cos(temp.x)*cos(temp.y), (N+temp.z)*cos(temp.x)*sin(temp.y), (N+temp.z)*sin(temp.x)/100, temp.w);
+  height = vertexPosition;
+}
+
