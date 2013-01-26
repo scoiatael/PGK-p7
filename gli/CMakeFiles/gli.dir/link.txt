@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/gli.dir/core/dummy.cpp.o  -o gli -rdynamic 
