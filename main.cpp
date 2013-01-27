@@ -9,7 +9,7 @@ int main( int argc, char** argv )
   file_names.push_back(std::string("b0e0.hgt"));
   InitGraphics();
 
-  glfwSetWindowTitle( "p6" );
+  glfwSetWindowTitle( "p7" );
 
   // Ensure we can capture the escape key being pressed below
   glfwEnable( GLFW_STICKY_KEYS );
@@ -22,7 +22,7 @@ int main( int argc, char** argv )
 //  glEnable(GL_CULL_FACE);
   // Accept fragment if it closer to the camera than the former one
   glDepthFunc(GL_LESS); 
-  glFrontFace(GL_CCW);
+//  glFrontFace(GL_CCW);
 
   // Create and compile our GLSL program from the shaders
   GLuint programIDs[2] = { LoadShaders( "tvs.vertexshader", "cfs.fragmentshader" ), LoadShaders( "tvs2.vertexshader", "cfs.fragmentshader" )};
@@ -33,19 +33,20 @@ int main( int argc, char** argv )
   GLuint EdgeyIDs[2] = {glGetUniformLocation(programIDs[0], "Edgey"), glGetUniformLocation(programIDs[1], "Edgey")};
   GLuint SideIDs[2] = {glGetUniformLocation(programIDs[0], "side"), glGetUniformLocation(programIDs[1], "side")};
   GLuint TextureIDs[2] = {glGetUniformLocation(programIDs[0], "texture"), glGetUniformLocation(programIDs[1], "texture")};
+  GLuint TimeIDs[2] = {glGetUniformLocation(programIDs[0], "time"), glGetUniformLocation(programIDs[1], "time")};
   std::cout << "Got uniforms..\n";
   
-  glActiveTexture(GL_TEXTURE0);
   std::cout << "Loadin textures...\n";
+  char texName[] = "texture2.jpg";
   GLuint tex_2d = SOIL_load_OGL_texture
   (
-    "texture.jpg",
+    texName,
     SOIL_LOAD_AUTO,
     SOIL_CREATE_NEW_ID,
     SOIL_FLAG_INVERT_Y
   );
   if(tex_2d == 0)
-    std::cerr << "SOIL loading error: '" << SOIL_last_result() << "' (" << "texture.jpg" << ")" << std::endl;
+    std::cerr << "SOIL loading error: '" << SOIL_last_result() << "' (" << texName << ")" << std::endl;
   else
     std::cout << "Done.\n";
 
@@ -90,20 +91,23 @@ int main( int argc, char** argv )
 
   //Indices::
   GLuint indexBufferObject, iBOs[maxLoD], numberOfIndices;
-  std::vector<GLuint> nOIs(5);
+  std::vector<GLuint> nOIs(maxLoD);
   glGenBuffers(maxLoD, iBOs);
   for(unsigned int density=1, i=0;i<maxLoD; i++, density*=2)
   {  
+    std::cout << "Entering for with i: " << i << "\n";
     nOIs[i]=(side-1)/density;
     if((side-1)%density!=0)
         nOIs[i]+=1;
     nOIs[i]=6*(nOIs[i]*(nOIs[i]));
-    std::vector< GLuint> indicesVec(nOIs[i]);
-    GLuint* indices = &indicesVec[0];
+    std::cout << "Allocating memory...\n";
+    GLuint* indices = new GLuint [nOIs[i]];
+    std::cout << "Done.\n";
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iBOs[i]);
     std::cout << "Density: " << density << " Number of indices: " << nOIs[i] << std::endl;
-    genIndices(indicesVec, side, density);
+    genIndices(indices, side, density);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*nOIs[i], indices, GL_STATIC_DRAW);
+    std::cout << "Leaving for with i: " << i << "\n";
   }
   
   // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
@@ -174,12 +178,14 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
                                                               mat4(1.0),
                                                              oy, glm::vec3(0, 0, 1)),
                                                 ox, glm::vec3(1,0,0)),
-                                    oz, glm::vec3(0,1,0)),vec3(-x,-y,z));
+                                    oz, glm::vec3(0,1,0)),vec3(-x - 10000*ball,-y - 4000*ball,z));
     glUniformMatrix4fv(MatrixIDs[ball], 1, GL_FALSE, &Vw[0][0]);
     glUniform1i(SideIDs[ball], side);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex_2d);
     glUniform1i(TextureIDs[ball], GL_TEXTURE0);
+
+    glUniform1f(TimeIDs[ball], glfwGetTime());
 
     indexBufferObject=iBOs[iBOindex];
     numberOfIndices=nOIs[iBOindex];
@@ -187,6 +193,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
  //   std::cout << ex << " " << ey << std::endl;
     if(ball==0)
     {
+        glCullFace(GL_BACK);
       for(int i = max(ex-3,0); i<= min(ex+3,360) ;i++)
         for(int j=max(ey-3,0); j<= min(ey+3,180); j++)
         {
@@ -207,12 +214,12 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
    //           << i << " "  << ex << " " << j << " " << ey << std::endl;
 
         }
-        glCullFace(GL_BACK);
     }
     else
     {
-      for(int i=edges[0].second-4+180; i<edges[0].second+5+180;i++)
-        for(int j=edges[0].first-4+90; j<edges[0].first+5+90;j++)
+        glCullFace(GL_FRONT);
+      for(int i=edges[0].second-18+180; i<edges[0].second+19+180;i++)
+        for(int j=edges[0].first-14+90; j<edges[0].first+4+90;j++)
         {
 
           glUniform1i(EdgexIDs[ball], (i-180));
@@ -222,7 +229,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
           if(piece_map[i][j]==-1)
           {
             point=vBOsize-1;
-            draw(vaoObjects[point], vBOs[point], iBOs[6], nOIs[6]);
+            draw(vaoObjects[point], vBOs[point], iBOs[8], nOIs[8]);
           }
           else
           {
@@ -230,7 +237,6 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
             draw(vaoObjects[point], vBOs[point], indexBufferObject, numberOfIndices);
           }
         }
-        glCullFace(GL_FRONT);
     }
 
     // Swap buffers
@@ -243,7 +249,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
   // Cleanup VBO and shader
   glDeleteProgram(programIDs[0]);
   glDeleteProgram(programIDs[1]);
-  CleanVBOs(vaoObjects, vBOs, vBOsize, iBOs);
+  CleanVBOs(vaoObjects, vBOs, vBOsize+1, iBOs, tex_2d);
 
   std::cout << "Cleaning done, terminating..\n";
   // Close OpenGL window and terminate GLFW

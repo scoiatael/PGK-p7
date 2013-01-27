@@ -2,6 +2,8 @@
 
 // Interpolated values from the vertex shaders
 varying vec3 coords;
+varying float dotpr;
+
 uniform sampler2D texture;
 
 
@@ -9,7 +11,7 @@ uniform sampler2D texture;
 void main(){
     vec3 color;
 float ht = coords.z;
-float alpha = 0.9;
+float alpha = 0.4;
  if            (ht < 0.0  )   color = vec3(0.0,          0.0,          1.0); //blue
        else if (ht < 500.0)   color = vec3(0.0,          ht/500.0,     0.0); //->green
        else if (ht < 1000.0)  color = vec3(ht/500.0-1.0, 1.0,          0.0); //->yellow
@@ -17,6 +19,6 @@ float alpha = 0.9;
        else                   color = vec3(1.0,          1.0,          1.0); //white
   color = alpha * color;
   vec4 temp = texture2D(texture, vec2(coords.x, coords.y));
- // temp = (1.0f- alpha)*temp;
-  gl_FragColor = vec4(color,1.0)/* + temp*/;
+  temp = (1.0f- alpha)*temp;
+  gl_FragColor = dotpr*(vec4(color,1.0) + temp);
 }

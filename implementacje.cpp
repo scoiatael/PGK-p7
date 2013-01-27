@@ -81,11 +81,12 @@ void draw(GLuint& vaoObject, GLuint& vertexBufferObject, GLuint& indexBufferObje
     glDrawElements(GL_TRIANGLES, numberOfVertices, GL_UNSIGNED_INT,0);
 }
 
-void CleanVBOs(GLuint* vaoObjects, GLuint* vBO, const unsigned int& vBOsize,  GLuint* iBO)
+void CleanVBOs(GLuint* vaoObjects, GLuint* vBO, const unsigned int& vBOsize,  GLuint* iBO, GLuint texture)
 {
   glDeleteBuffers(vBOsize, vBO);
   glDeleteBuffers(maxLoD, iBO);
   glDeleteVertexArrays(vBOsize, vaoObjects);
+  glDeleteTextures(1, &texture);
 }
 
 void GLFWCALL Key_Callback(int key, int action)
@@ -226,7 +227,7 @@ void loadVertices(const std::string& filename, std::vector<int>& arg, const bool
   std::cout << "Edges are: " << edge.first << " " << edge.second << std::endl; 
 }
 
-void genIndices(std::vector< GLuint >& indices, const unsigned int& side, const unsigned int& interval)
+void genIndices(GLuint* indices, const unsigned int& side, const unsigned int& interval)
 {
   std::cout << "Generating indices with interval:" << interval << "..\n";
   assert(interval!=0);

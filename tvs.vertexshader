@@ -4,15 +4,18 @@ uniform mat4 MVP;
 uniform int Edgex;
 uniform int Edgey;
 uniform int side;
+uniform float time;
 
 varying vec3 coords;
+varying float dotpr;
 
 void main()
 {	
   vec3 temp = vertexPosition;
-  float lon = (Edgex + temp.x/side/10)/360,
-          lat = (((-1)*Edgey-temp.y/side/10)-90)/180;
-  gl_Position =  MVP * vec4(vec3(((temp.x)+Edgex*(side-5))*10, (((-1)*temp.y)+Edgey*(side-5))*10,temp.z), 1.0);
+  float lon = /*(Edgex + 180 +*/ temp.x/side/*)/360*/,
+          lat = /*(Edgey + 90 */+ 1 - temp.y/side/*)/180*/;
+  gl_Position =  MVP * vec4(((temp.x)+Edgex*(side-5))*10, (((-1)*temp.y)+Edgey*(side-5))*10, temp.z, 1.0);
   coords = vec3(lon, lat, vertexPosition.z);
+  dotpr = 1;
 }
 

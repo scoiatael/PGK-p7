@@ -43,10 +43,10 @@ int min(int a, int b);
 int max(int a, int b);
 void draw(GLuint& vaoObject, GLuint& vertexBufferObject, GLuint& indexBufferObject, unsigned int numberOfVertices);
 
-void CleanVBOs(GLuint* vaoObjects, GLuint* vBO, const unsigned int& vBOsize,  GLuint* iBO);
+void CleanVBOs(GLuint* vaoObjects, GLuint* vBO, const unsigned int& vBOsize,  GLuint* iBO, GLuint texture);
 
 void GLFWCALL Key_Callback(int key, int action);
 void loadVertices(const std::string& filename, std::vector< int>& arg, const bool& bin, const int& side, std::pair<int,int>& edge, int& height);
-void genIndices(std::vector<GLuint>& indices, const unsigned int& side, const unsigned int& density);
+void genIndices(GLuint* indices, const unsigned int& side, const unsigned int& density);
 void parse_args(const int& argc, char** argv, std::vector<std::string>& arg);
 #endif
