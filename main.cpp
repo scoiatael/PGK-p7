@@ -94,7 +94,10 @@ int main( int argc, char** argv )
   glGenBuffers(maxLoD, iBOs);
   for(unsigned int density=1, i=0;i<maxLoD; i++, density*=2)
   {  
-    nOIs[i]=6*((side-1)/(density)+1)*((side-1)/(density)+1);
+    nOIs[i]=(side-1)/density;
+    if((side-1)%density!=0)
+        nOIs[i]+=1;
+    nOIs[i]=6*(nOIs[i]*(nOIs[i]));
     std::vector< GLuint> indicesVec(nOIs[i]);
     GLuint* indices = &indicesVec[0];
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iBOs[i]);
@@ -135,6 +138,8 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
   starty=y;
   std::cout << edges[0].first << " " << edges[0].second << std::endl;
   do{
+    int ex = x/12010+180;
+    int ey = y/12010+90;
     //time statistics:
     FPScounter++;
     double cur_time = glfwGetTime();
@@ -142,7 +147,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     {
       double FPS = (float)FPScounter/(cur_time-last_reset);
       std::cout << "FPS: " << FPS << " lod: " << iBOindex << std::endl;
-      std::cout << x/1201+180 << " " << y/1201+90 << " " << z << "\n";
+      std::cout << ex << " " << ey << std::endl;
       if(autolod && abs(FPS-optfps)>4)
       {
         if(FPS<optfps && iBOindex<maxLoD)
@@ -179,8 +184,6 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     indexBufferObject=iBOs[iBOindex];
     numberOfIndices=nOIs[iBOindex];
 
-    int ex = x/12010+180;
-    int ey = y/12010+90;
  //   std::cout << ex << " " << ey << std::endl;
     if(ball==0)
     {

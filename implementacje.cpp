@@ -232,7 +232,7 @@ void genIndices(std::vector< GLuint >& indices, const unsigned int& side, const 
   assert(interval!=0);
   bool last_chance_x=false,last_chance_y=true;
   int i=0;
-  for(int y=side-interval,x=0,lasty=side-1, lastx; y>=0 || last_chance_y; y-=interval)
+  for(int y=side-interval-1,x=0,lasty=side-1, lastx; y>=0 || last_chance_y; y-=interval)
   {
     last_chance_x=true;
     if(y<0)
@@ -264,9 +264,7 @@ void genIndices(std::vector< GLuint >& indices, const unsigned int& side, const 
       indices[i] = (y)*side+x;
       i++;
       lastx=x;
-/*      for(int j=6;j>0;j--)
-        std::cout << j << "->" << indices[i-j] << " ";
-      std::cout << std::endl;*/
+//      std::cout << y << " " << x << "\n";
     }
     lasty=y;
   }
