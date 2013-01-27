@@ -19,6 +19,8 @@ using namespace glm;
 
 #include <common/shader.hpp>
 
+#include "SOIL.h"
+
 #include<sys/time.h>
 #include <vector>
 #include <string>

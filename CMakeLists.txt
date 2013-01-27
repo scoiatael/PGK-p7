@@ -1,6 +1,6 @@
 # CMake entry point
 cmake_minimum_required (VERSION 2.6)
-project (p6)
+project (p7)
 
 find_package(OpenGL REQUIRED)
 
@@ -16,21 +16,21 @@ if(INCLUDE_DISTRIB)
 	add_subdirectory(distrib)
 endif(INCLUDE_DISTRIB)
 
-
-
 include_directories(
 	external/AntTweakBar-1.15/include/
 	external/glfw-2.7.6/include/
 	external/glm-0.9.4.0/
 	external/glew-1.9.0/include/
-	.
+  .
 )
-add_subdirectory(gli)
+
+#link_directories(${CMAKE_SOURCE_DIR})
 
 set(ALL_LIBS
 	${OPENGL_LIBRARY}
 	GLFW_276
-	GLEW_190
+  GLEW_190
+  SOIL
 )
 
 add_definitions(
@@ -40,16 +40,17 @@ add_definitions(
 	-DGLEW_STATIC
 	-D_CRT_SECURE_NO_WARNINGS
 )
-# Tutorial 4
-add_executable(p6
+
+
+add_executable(p7
 	main.cpp
 	implementacje.cpp
 	common/shader.cpp
 	common/shader.hpp
 )
-target_link_libraries(p6
+
+target_link_libraries(p7
 	${ALL_LIBS}
 )
 # Xcode and Visual working directories
-set_target_properties(p6 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
-create_target_launcher(p6 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/")
+set_target_properties(p7 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")

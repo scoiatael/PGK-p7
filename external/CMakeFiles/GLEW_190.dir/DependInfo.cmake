@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_C
-  "/home/luki/Downloads/PGK/PGK-p6/external/glew-1.9.0/src/glew.c" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/GLEW_190.dir/glew-1.9.0/src/glew.c.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/glew-1.9.0/src/glew.c" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/GLEW_190.dir/glew-1.9.0/src/glew.c.o"
   )
 SET(CMAKE_C_COMPILER_ID "GNU")
 

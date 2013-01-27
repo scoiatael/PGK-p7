@@ -5,19 +5,19 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_C
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/TwEventGLFW.c" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwEventGLFW.c.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/TwEventGLFW.c" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwEventGLFW.c.o"
   )
 SET(CMAKE_C_COMPILER_ID "GNU")
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/LoadOGL.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/LoadOGL.cpp.o"
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/LoadOGLCore.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/LoadOGLCore.cpp.o"
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/TwBar.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwBar.cpp.o"
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/TwColors.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwColors.cpp.o"
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/TwFonts.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwFonts.cpp.o"
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/TwMgr.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwMgr.cpp.o"
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/TwOpenGL.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwOpenGL.cpp.o"
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/TwOpenGLCore.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwOpenGLCore.cpp.o"
-  "/home/luki/Downloads/PGK/PGK-p6/external/AntTweakBar-1.15/src/TwPrecomp.cpp" "/home/luki/Downloads/PGK/PGK-p6/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwPrecomp.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/LoadOGL.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/LoadOGL.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/LoadOGLCore.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/LoadOGLCore.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/TwBar.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwBar.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/TwColors.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwColors.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/TwFonts.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwFonts.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/TwMgr.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwMgr.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/TwOpenGL.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwOpenGL.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/TwOpenGLCore.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwOpenGLCore.cpp.o"
+  "/home/xubuntu/luki/Documents/PGK/p7/external/AntTweakBar-1.15/src/TwPrecomp.cpp" "/home/xubuntu/luki/Documents/PGK/p7/external/CMakeFiles/ANTTWEAKBAR_151_OGLCORE_GLFW.dir/AntTweakBar-1.15/src/TwPrecomp.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

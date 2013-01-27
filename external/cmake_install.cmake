@@ -1,4 +1,4 @@
-# Install script for directory: /home/luki/Downloads/PGK/PGK-p6/external
+# Install script for directory: /home/xubuntu/luki/Documents/PGK/p7/external
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

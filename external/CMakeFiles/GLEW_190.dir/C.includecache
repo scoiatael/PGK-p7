@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/luki/Downloads/PGK/PGK-p6/external/glew-1.9.0/src/glew.c
+/home/xubuntu/luki/Documents/PGK/p7/external/glew-1.9.0/src/glew.c
 GL/glew.h
 -
 GL/wglew.h
