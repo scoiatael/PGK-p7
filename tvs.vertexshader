@@ -1,19 +1,18 @@
-#version 330 core
-
-layout(location = 0) in vec3 vertexPosition;
+#version 120
+attribute vec3 vertexPosition;
 uniform mat4 MVP;
 uniform int Edgex;
 uniform int Edgey;
 uniform int side;
 
-out vec3 coords;
+varying vec3 coords;
 
 void main()
 {	
   vec3 temp = vertexPosition;
-  float lon = (Edgex+temp.x/side)/360,
-          lat = ((-Edgey-temp.y/side)-90)/180;
-  gl_Position =  MVP * vec4(vec3(((vertexPosition.x)+Edgex*(side-5))*10, (((-1)*vertexPosition.y)+Edgey*(side-5))*10,temp.z), 1.0);
-  coords = vec3(lon,lat,vertexPosition.z);
+  float lon = (Edgex + temp.x/side)/360,
+          lat = (((-1)*Edgey-temp.y/side)-90)/180;
+  gl_Position =  MVP * vec4(vec3(((temp.x)+Edgex*(side-5))*10, (((-1)*temp.y)+Edgey*(side-5))*10,temp.z), 1.0);
+  coords = vec3(lon, lat, vertexPosition.z);
 }
 

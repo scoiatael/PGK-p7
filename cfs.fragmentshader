@@ -1,14 +1,13 @@
-#version 330 core
+#version 120
 
 // Interpolated values from the vertex shaders
-in vec3 coords;
+varying vec3 coords;
 uniform sampler2D texture;
 
-// Ouput data
-out vec3 color;
 
 
 void main(){
+    vec3 color;
 float ht = coords.z;
 float alpha = 0.5;
  if            (ht < 0.0  )   color = vec3(0.0,          0.0,          1.0); //blue
@@ -16,5 +15,8 @@ float alpha = 0.5;
        else if (ht < 1000.0)  color = vec3(ht/500.0-1.0, 1.0,          0.0); //->yellow
        else if (ht < 1500.0)  color = vec3(1.0,          3.0-ht/500.0, 0.0); //->red
        else                   color = vec3(1.0,          1.0,          1.0); //white
-  color = alpha*color + (1-alpha)*texture2D(texture, vec2(coords.x, coords.u));
+  color = alpha * color;
+  vec4 temp = texture2D(texture, vec2(coords.x, coords.y));
+  temp = (1.0f- alpha)*temp;
+  gl_FragColor = vec4(color,1.0) + temp;
 }

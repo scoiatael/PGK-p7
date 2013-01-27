@@ -1,7 +1,7 @@
 #include "definicje.h"
 
 int x,y,z;
-unsigned int iBOindex;
+unsigned int iBOindex=1;
 float ox, oy,oz;
 const int maxLoD(10);
 bool autolod=false;

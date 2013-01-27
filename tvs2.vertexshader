@@ -1,21 +1,22 @@
-#version 330 core
-
-layout(location = 0) in vec3 vertexPosition;
+#version 120
+attribute vec3 vertexPosition;
 uniform mat4 MVP;
 uniform int Edgex;
 uniform int Edgey;
 uniform int side;
 
-out vec3 height;
+varying vec3 coords;
 
 float M_PI = 3.14159265359;
 
 void main()
 {	
   vec3 temp = vertexPosition;
+  float ndeg = 9;
   float lon = Edgex+temp.x/side,
-          lat = (-Edgey-temp.y/side)-9,
+          lat = (-Edgey-temp.y/side)-ndeg,
           R = 6400+temp.z/10;
+  coords = vec3(lon/360, (lat+ndeg)/180, vertexPosition.z);
   float mod = 10; 
   lat*=mod;
   lon*=mod;
@@ -25,6 +26,5 @@ void main()
   temp.y = (R * sin(lat)-10000);
   temp.z = R * cos(lon)*cos(lat)-4000;
   gl_Position =  MVP * vec4(temp,1.0);
-  height = vertexPosition;
 }
 
