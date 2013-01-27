@@ -1,13 +1,19 @@
-#version 120
+#version 330 core
 
-attribute vec3 vertexPosition;
+layout(location = 0) in vec3 vertexPosition;
 uniform mat4 MVP;
+uniform int Edgex;
+uniform int Edgey;
+uniform int side;
 
-varying vec3 height;
+out vec3 coords;
 
 void main()
 {	
-  gl_Position =  MVP * vec4(vec3(vertexPosition.x*10, -1*vertexPosition.y*10,vertexPosition.z), 1.0);
-  height = vertexPosition;
+  vec3 temp = vertexPosition;
+  float lon = (Edgex+temp.x/side)/360,
+          lat = ((-Edgey-temp.y/side)-90)/180;
+  gl_Position =  MVP * vec4(vec3(((vertexPosition.x)+Edgex*(side-5))*10, (((-1)*vertexPosition.y)+Edgey*(side-5))*10,temp.z), 1.0);
+  coords = vec3(lon,lat,vertexPosition.z);
 }
 

@@ -1,39 +1,13 @@
 #include "definicje.h"
 
-int mcc::get_time()
-{
-  timeval timer;
-  gettimeofday(&timer, NULL);
-  return timer.tv_sec*1000000 + timer.tv_usec;
-}
-float mcc::get_timef()
-{
-  return (float)mcc::get_time()/10000.0f;
-}
-int mcc::make_lock(const float& timeout)
-{
-  locks.push_back(std::pair<float,float>(0.,timeout));
-  return locks.size()-1;
-}
-int mcc::get_lock(const int& ID)
-{
-  if(ID<locks.size())
-    return locks[ID].first;
-  return 0;
-}
-void mcc::reset_lock(const int& ID)
-{
-  if(ID < locks.size())
-    locks[ID].first = locks[ID].second;
-}
-void mcc::update()
-{
-  int cur_time = get_time();
-  int interval = cur_time-last_update;
-  last_update = cur_time;
-  for(unsigned int i=0; i<locks.size();i++)
-    locks[i].first-=interval;
-}
+int x,y,z;
+unsigned int iBOindex;
+float ox, oy,oz;
+const int maxLoD(10);
+bool autolod=false;
+const double optfps(20);
+char ball=0;
+int startx, starty;
 
 void parse_args(const int& argc, char** argv, std::vector<std::string>& arg)
 {
@@ -81,6 +55,115 @@ void InitGraphics()
 		fprintf(stderr, "Failed to initialize GLEW\n");
 		exit(-1);
 	}
+}
+
+int min(int a, int b)
+{
+  if(a<b)
+    return a;
+  else
+    return b;
+}
+
+int max(int a, int b)
+{
+  if(a>b)
+    return a;
+  else
+    return b;
+}
+void draw(GLuint& vaoObject, GLuint& vertexBufferObject, GLuint& indexBufferObject, unsigned int numberOfVertices)
+{
+    glBindVertexArray(vaoObject);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
+    glDrawElements(GL_TRIANGLES, numberOfVertices, GL_UNSIGNED_INT,0);
+}
+
+void CleanVBOs(GLuint* vaoObjects, GLuint* vBO, const unsigned int& vBOsize,  GLuint* iBO)
+{
+  glDeleteBuffers(vBOsize, vBO);
+  glDeleteBuffers(maxLoD, iBO);
+  glDeleteVertexArrays(vBOsize, vaoObjects);
+}
+
+void GLFWCALL Key_Callback(int key, int action)
+{
+  int mod=500;
+  if(action == GLFW_PRESS)
+  {
+//    std::cout << (char)key << " " << iBOindex <<  "\n";
+    switch(key)
+    {
+      case 'Q':
+        x-=mod;
+        break;
+      case 'A':
+        x+=mod;
+        break;
+      case 'W':
+        y-=mod;
+        break;
+      case 'S':
+        y+=mod;
+        break;
+      case 'E':
+        z+=mod;
+        break;
+      case 'D':
+        z-=mod;
+        break;
+      case 'R':
+        ox+=5;
+        break;
+      case 'F':
+        ox-=5;
+        break;
+      case 'T':
+        oy+=5;
+        break;
+      case 'G':
+        oy-=5;
+        break;
+      case 'Y':
+        oz+=5;
+        break;
+      case 'H':
+        oz-=5;
+        break;
+      case GLFW_KEY_UP:
+        iBOindex+=1;
+        iBOindex%=maxLoD;
+        break;
+      case GLFW_KEY_DOWN:
+        iBOindex-=1;
+        iBOindex%=maxLoD;
+        break;
+      case GLFW_KEY_SPACE:
+        autolod=!autolod;
+        break;
+      case GLFW_KEY_ENTER:
+        ball=1-ball;
+        oz=0;
+        oy=0;
+        ox=0;
+        z=0;
+        if(ball==0)
+        {
+          x=startx;
+          y=starty;
+        }
+        else
+        {
+          y=0;
+          x=0;
+        }
+        break;
+
+
+    }
+  }
 }
 
 void loadVertices(const std::string& filename, std::vector<int>& arg, const bool& bin, const int& side, std::pair<int,int>& edge, int& height)

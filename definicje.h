@@ -29,24 +29,23 @@ using namespace glm;
 #include <fstream>
 #include <cassert>
 
-struct mcc
-{
-  static int get_time();
-  static float get_timef();
-
-  std::vector< std::pair<int,int> > locks;
-  int last_update;
-  mcc()
-  :  locks(), last_update(get_time())
-    {}
-
-  int make_lock(const float& timeout);
-  int get_lock(const int& ID);
-  void reset_lock(const int& ID);
-  void update();
-};
+extern int x,y,z;
+extern unsigned int iBOindex;
+extern float ox, oy,oz;
+extern const int maxLoD;
+extern bool autolod;
+extern const double optfps;
+extern char ball;
+extern int startx, starty;
 
 void InitGraphics();
+int min(int a, int b);
+int max(int a, int b);
+void draw(GLuint& vaoObject, GLuint& vertexBufferObject, GLuint& indexBufferObject, unsigned int numberOfVertices);
+
+void CleanVBOs(GLuint* vaoObjects, GLuint* vBO, const unsigned int& vBOsize,  GLuint* iBO);
+
+void GLFWCALL Key_Callback(int key, int action);
 void loadVertices(const std::string& filename, std::vector< int>& arg, const bool& bin, const int& side, std::pair<int,int>& edge, int& height);
 void genIndices(std::vector<GLuint>& indices, const unsigned int& side, const unsigned int& density);
 void parse_args(const int& argc, char** argv, std::vector<std::string>& arg);
