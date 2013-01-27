@@ -15,6 +15,7 @@ vec3 test_coords(vec3 vertexPosition)
   float N = R/sqrt(1-pow(cos(temp.x),2));
   return vec3((N+temp.z)*cos(temp.x)*cos(temp.y), (N+temp.z)*cos(temp.x)*sin(temp.y), (N+temp.z)*sin(temp.x));
 }
+
 void init(GLuint& vaoObject1)
 {
 }
@@ -99,6 +100,22 @@ int main( int argc, char** argv )
   std::cout << "Starting..\n";
   std::vector<std::string> file_names;
   parse_args(argc, argv, file_names);
+
+/* load an image file directly as a new OpenGL texture */
+  GLuint tex_2d = SOIL_load_OGL_texture
+      (
+          "texture.png",
+              SOIL_LOAD_AUTO,
+                  SOIL_CREATE_NEW_ID,
+                      SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+                        );
+    
+  /* check for an error during the load process */
+  if( 0 == tex_2d )
+  {
+      printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
+  }
+
   InitGraphics();
 
   glfwSetWindowTitle( "p6" );
