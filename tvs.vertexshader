@@ -12,8 +12,8 @@ out float dotpr;
 void main()
 {	
   vec3 temp = vertexPosition;
-  float lon = /*(Edgex + 180 +*/ temp.x/side/*)/360*/,
-          lat = /*(Edgey + 90 */+ 1 - temp.y/side/*)/180*/;
+  float lon = (Edgex + 180 + temp.x/side)/360,
+          lat = (Edgey + 90 + 1 - temp.y/side)/180;
   gl_Position =  MVP * vec4(((temp.x)+Edgex*(side-5))*10, (((-1)*temp.y)+Edgey*(side-5))*10, temp.z, 1.0);
   coords = vec3(lon, lat, vertexPosition.z);
   dotpr = 1;

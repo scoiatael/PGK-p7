@@ -32,7 +32,7 @@ int main( int argc, char** argv )
   GLuint EdgexIDs[2] = {glGetUniformLocation(programIDs[0], "Edgex"), glGetUniformLocation(programIDs[1], "Edgex")};
   GLuint EdgeyIDs[2] = {glGetUniformLocation(programIDs[0], "Edgey"), glGetUniformLocation(programIDs[1], "Edgey")};
   GLuint SideIDs[2] = {glGetUniformLocation(programIDs[0], "side"), glGetUniformLocation(programIDs[1], "side")};
-  GLuint TextureIDs[2] = {glGetUniformLocation(programIDs[0], "texture"), glGetUniformLocation(programIDs[1], "texture")};
+  GLuint TextureIDs[2] = {glGetUniformLocation(programIDs[0], "tex2d"), glGetUniformLocation(programIDs[1], "tex2d")};
   GLuint TimeIDs[2] = {glGetUniformLocation(programIDs[0], "time"), glGetUniformLocation(programIDs[1], "time")};
   GLuint AlphaIDs[2] = {glGetUniformLocation(programIDs[0], "alpha"), glGetUniformLocation(programIDs[1], "alpha")};
   std::cout << "Got uniforms..\n";
@@ -53,8 +53,8 @@ int main( int argc, char** argv )
   int minlod, maxlod;
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, tex_2d);
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &minlod);
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &maxlod);
+  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_RED_TYPE, &minlod);
+  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_GREEN_TYPE, &maxlod);
   std::cout << "Params: " << minlod << " " << maxlod << std::endl;
 
   const int side(1201);
@@ -63,9 +63,9 @@ int main( int argc, char** argv )
 
 
   //Vertices:
-  short piece_map[360][180];
+  short piece_map[360][181];
   for(int i=0; i<360; i++)
-    for(int y=0; y<180; y++)
+    for(int y=0; y<=180; y++)
       piece_map[i][y] = -1;
   unsigned int numberOfVertices=side*side;
   GLuint vaoObjects[vBOsize+1], vertexBufferObject, vBOs[vBOsize+1];
@@ -179,10 +179,11 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
-    glm::mat4 Vw=MVP * glm::translate( mat4(1.0),vec3(-x + 6000*ball,-y - 6000*ball,z - 12000*ball)) 
+    glm::mat4 Vw=MVP * glm::translate( mat4(1.0),vec3((-x + 6000)*ball,(-y - 6000)*ball,(z - 12000)*ball)) 
                      * glm::rotate(mat4(1.0), oz, glm::vec3(0,1,0)) 
                      * glm::rotate(mat4(1.0), ox, glm::vec3(1,0,0)) 
-                     * glm::rotate(mat4(1.0), oy, glm::vec3(0,0,1));
+                     * glm::rotate(mat4(1.0), oy, glm::vec3(0,0,1))
+                     * glm::translate( mat4(1.0), vec3(-x*(1-ball), -y*(1-ball), z*(1-ball)));
     glUniformMatrix4fv(MatrixIDs[ball], 1, GL_FALSE, &Vw[0][0]);
     
     glUniform1i(SideIDs[ball], side);
@@ -192,7 +193,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex_2d);
-    glUniform1i(TextureIDs[ball], GL_TEXTURE0+0);
+    glUniform1i(TextureIDs[ball], /*GL_TEXTURE0+*/0);
 
     indexBufferObject=iBOs[iBOindex];
     numberOfIndices=nOIs[iBOindex];
@@ -226,7 +227,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     {
         glCullFace(GL_FRONT);
       for(int i=/*edges[0].second+180+*/0; i</*edges[0].second+18*/360;i++)
-        for(int j=/*edges[0].first+90+*/0; j</*edges[0].first+90*/180;j++)
+        for(int j=/*edges[0].first+90+*/0; j<=/*edges[0].first+90*/180;j++)
         {
 
           glUniform1i(EdgexIDs[ball], (i-180));
