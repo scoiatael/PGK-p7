@@ -14,20 +14,22 @@ float M_PI = 3.14159265359;
 void main()
 {	
   vec3 temp = vertexPosition;
-  float ndeg = 9;
+  temp.x-=5;
+  temp.y-=5;
   float lon = Edgex+temp.x/side,
-          lat = Edgey+temp.y/side,
+          lat = Edgey-temp.y/side,
           R = 6400+temp.z/10;
+//  dotpr = (dot(normalize(vec2(lon, lat)), normalize(vec2(time, 0)))+1)/2;
+    dotpr = cos(lon*M_PI/180);
   coords = vec3((lon+180)/360, (lat+90)/180, vertexPosition.z);
-  dotpr = (dot(normalize(vec2(lon, lat)), normalize(vec2(time, 0)))+1)/2;
-  lat+=ndeg;
   lat*=-1;
   float mod = 10; 
   lat*=mod;
   lon*=mod;
+  lat-=90;
   lat*=M_PI/180;
   lon*=M_PI/180;
-  temp.x = R * cos(lat) * sin(lon)+6000;
+  temp.x = R * cos(lat) * sin(lon);
   temp.y = (R * sin(lat));
   temp.z = R * cos(lon)*cos(lat);
   gl_Position =  MVP * vec4(temp,1.0);

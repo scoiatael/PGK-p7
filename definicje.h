@@ -37,6 +37,7 @@ extern bool autolod;
 extern const double optfps;
 extern char ball;
 extern int startx, starty;
+extern int alpha;
 
 void InitGraphics();
 int min(int a, int b);

@@ -8,6 +8,7 @@ bool autolod=false;
 const double optfps(20);
 char ball=0;
 int startx, starty;
+int alpha;
 
 void parse_args(const int& argc, char** argv, std::vector<std::string>& arg)
 {
@@ -140,6 +141,14 @@ void GLFWCALL Key_Callback(int key, int action)
       case GLFW_KEY_DOWN:
         iBOindex-=1;
         iBOindex%=maxLoD;
+        break;
+      case GLFW_KEY_LEFT:
+        if(alpha<10)
+            alpha+=1;
+        break;
+      case GLFW_KEY_RIGHT:
+        if(alpha>0)
+            alpha-=1;
         break;
       case GLFW_KEY_SPACE:
         autolod=!autolod;

@@ -34,6 +34,7 @@ int main( int argc, char** argv )
   GLuint SideIDs[2] = {glGetUniformLocation(programIDs[0], "side"), glGetUniformLocation(programIDs[1], "side")};
   GLuint TextureIDs[2] = {glGetUniformLocation(programIDs[0], "texture"), glGetUniformLocation(programIDs[1], "texture")};
   GLuint TimeIDs[2] = {glGetUniformLocation(programIDs[0], "time"), glGetUniformLocation(programIDs[1], "time")};
+  GLuint AlphaIDs[2] = {glGetUniformLocation(programIDs[0], "alpha"), glGetUniformLocation(programIDs[1], "alpha")};
   std::cout << "Got uniforms..\n";
   
   std::cout << "Loadin textures...\n";
@@ -151,7 +152,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     {
       double FPS = (float)FPScounter/(cur_time-last_reset);
       std::cout << "FPS: " << FPS << " lod: " << iBOindex << std::endl;
-      std::cout << ex << " " << ey << std::endl;
+      std::cout << ex << " " << ey << " " << alpha <<  std::endl;
       if(autolod && abs(FPS-optfps)>4)
       {
         if(FPS<optfps && iBOindex<maxLoD)
@@ -172,13 +173,10 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
-    glm::mat4 Vw=MVP * glm::translate( glm::rotate( 
-                                    glm::rotate(
-                                                glm::rotate(
-                                                              mat4(1.0),
-                                                             oy, glm::vec3(0, 0, 1)),
-                                                ox, glm::vec3(1,0,0)),
-                                    oz, glm::vec3(0,1,0)),vec3(-x - 10000*ball,-y - 4000*ball,z));
+    glm::mat4 Vw=MVP * glm::translate( mat4(1.0),vec3(-x + 6000*ball,-y - 7000*ball,z - 6000*ball)) 
+                     * glm::rotate(mat4(1.0), oz, glm::vec3(0,1,0)) 
+                     * glm::rotate(mat4(1.0), ox, glm::vec3(1,0,0)) 
+                     * glm::rotate(mat4(1.0), oy, glm::vec3(0,0,1));
     glUniformMatrix4fv(MatrixIDs[ball], 1, GL_FALSE, &Vw[0][0]);
     glUniform1i(SideIDs[ball], side);
     glActiveTexture(GL_TEXTURE0);
@@ -186,6 +184,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     glUniform1i(TextureIDs[ball], GL_TEXTURE0);
 
     glUniform1f(TimeIDs[ball], glfwGetTime());
+    glUniform1f(AlphaIDs[ball], (float)alpha*0.1);
 
     indexBufferObject=iBOs[iBOindex];
     numberOfIndices=nOIs[iBOindex];
@@ -218,8 +217,8 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     else
     {
         glCullFace(GL_FRONT);
-      for(int i=edges[0].second-18+180; i<edges[0].second+19+180;i++)
-        for(int j=edges[0].first-14+90; j<edges[0].first+4+90;j++)
+      for(int i=edges[0].second-18+180; i<edges[0].second+18+180;i++)
+        for(int j=edges[0].first-13+90; j<edges[0].first+5+90;j++)
         {
 
           glUniform1i(EdgexIDs[ball], (i-180));
