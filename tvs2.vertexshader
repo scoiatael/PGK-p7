@@ -14,14 +14,11 @@ float M_PI = 3.14159265359;
 void main()
 {	
   vec3 temp = vertexPosition;
-  temp.x-=5;
-  temp.y-=5;
-  float lon = Edgex+temp.x/side,
-          lat = Edgey-temp.y/side,
+  float lon = Edgex+temp.x/(side-5),
+          lat = Edgey-temp.y/(side-5),
           R = 6400+temp.z/10;
 //  dotpr = (dot(normalize(vec2(lon, lat)), normalize(vec2(time, 0)))+1)/2;
-    dotpr = cos(lon*M_PI/180);
-  coords = vec3((lon+180)/360, (lat+90)/180, vertexPosition.z);
+    dotpr = max(min((cos(time - lon*M_PI/18)+1.0)/2+0.5, 1.0),0.0);
   lat*=-1;
   float mod = 10; 
   lat*=mod;
@@ -29,6 +26,7 @@ void main()
   lat-=90;
   lat*=M_PI/180;
   lon*=M_PI/180;
+  coords = vec3((lon+180)/360, (lat+90)/180, vertexPosition.z);
   temp.x = R * cos(lat) * sin(lon);
   temp.y = (R * sin(lat));
   temp.z = R * cos(lon)*cos(lat);
