@@ -50,7 +50,13 @@ int main( int argc, char** argv )
     std::cerr << "SOIL loading error: '" << SOIL_last_result() << "' (" << texName << ")" << std::endl;
   else
     std::cout << "Done.\n";
-  
+  int minlod, maxlod;
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, tex_2d);
+  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &minlod);
+  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &maxlod);
+  std::cout << "Params: " << minlod << " " << maxlod << std::endl;
+
   const int side(1201);
   const int vBOsize(file_names.size());
 
@@ -178,13 +184,15 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
                      * glm::rotate(mat4(1.0), ox, glm::vec3(1,0,0)) 
                      * glm::rotate(mat4(1.0), oy, glm::vec3(0,0,1));
     glUniformMatrix4fv(MatrixIDs[ball], 1, GL_FALSE, &Vw[0][0]);
+    
     glUniform1i(SideIDs[ball], side);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, tex_2d);
-    glUniform1i(TextureIDs[ball], GL_TEXTURE0);
-
+    
     glUniform1f(TimeIDs[ball], glfwGetTime());
     glUniform1f(AlphaIDs[ball], (float)alpha*0.1);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex_2d);
+    glUniform1i(TextureIDs[ball], GL_TEXTURE0+0);
 
     indexBufferObject=iBOs[iBOindex];
     numberOfIndices=nOIs[iBOindex];

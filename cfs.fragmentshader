@@ -11,22 +11,15 @@ out vec4 colorF;
 
 void main(){
   vec4 temp = texture2D(texture, vec2(coords.x, coords.y));
-    vec3 color;
-float ht = coords.z;
- if            (ht < 0.0  )   color = vec3(0.0,          0.0,          1.0); //blue
-       else if (ht < 500.0)   color = vec3(0.0,          ht/500.0,     0.0); //->green
-       else if (ht < 1000.0)  color = vec3(ht/500.0-1.0, 1.0,          0.0); //->yellow
-       else if (ht < 1500.0)  color = vec3(1.0,          3.0-ht/500.0, 0.0); //->red
-       else                   color = vec3(1.0,          1.0,          1.0); //white
+  vec3 color;
+  float ht = coords.z;
+   if            (ht < 0.0  )   color = vec3(0.0,          0.0,          1.0); //blue
+         else if (ht < 500.0)   color = vec3(0.0,          ht/500.0,     0.0); //->green
+         else if (ht < 1000.0)  color = vec3(ht/500.0-1.0, 1.0,          0.0); //->yellow
+         else if (ht < 1500.0)  color = vec3(1.0,          3.0-ht/500.0, 0.0); //->red
+         else                   color = vec3(1.0,          1.0,          1.0); //white
   color = alpha * color;
-//  temp = (1.0f- alpha)*temp;
-//  colorF = dotpr*(vec4(color,1.0) + temp);
- // colorF = vec4(color, 1.0);
-  vec2 size = textureSize(texture,0);
-    if(size.x != 1.0)
-      colorF = vec4(0.5,0.5,1.0,1.0);
-    else
-      colorF = vec4(1.0,0.5,0.5,1.0);
-//    colorF = temp;
-//    colorF = dotpr*(vec4(color, 1.0) + (1.0 - alpha)*vec4(coords.x,coords.y,0.1,1.0));
+  temp = (1.0f- alpha)*temp;
+  colorF = dotpr*(vec4(color, 1.0) + (1.0 - alpha)*vec4(coords.x,coords.y,0.1,1.0));
+//  colorF = dotpr*(vec4(color, 1.0) + temp);
 }
