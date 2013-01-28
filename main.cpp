@@ -19,7 +19,7 @@ int main( int argc, char** argv )
 
   // Enable depth test
   glEnable(GL_DEPTH_TEST);
-//  glEnable(GL_CULL_FACE);
+  glEnable(GL_CULL_FACE);
   // Accept fragment if it closer to the camera than the former one
   glDepthFunc(GL_LESS); 
 //  glFrontFace(GL_CCW);
@@ -38,7 +38,7 @@ int main( int argc, char** argv )
   std::cout << "Got uniforms..\n";
   
   std::cout << "Loadin textures...\n";
-  char texName[] = "texture2.jpg";
+  char texName[] = "texture3.jpg";
   GLuint tex_2d = SOIL_load_OGL_texture
   (
     texName,
@@ -50,7 +50,7 @@ int main( int argc, char** argv )
     std::cerr << "SOIL loading error: '" << SOIL_last_result() << "' (" << texName << ")" << std::endl;
   else
     std::cout << "Done.\n";
-
+  
   const int side(1201);
   const int vBOsize(file_names.size());
 
@@ -173,7 +173,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
-    glm::mat4 Vw=MVP * glm::translate( mat4(1.0),vec3(-x + 6000*ball,-y - 7000*ball,z - 6000*ball)) 
+    glm::mat4 Vw=MVP * glm::translate( mat4(1.0),vec3(-x + 6000*ball,-y - 6000*ball,z - 12000*ball)) 
                      * glm::rotate(mat4(1.0), oz, glm::vec3(0,1,0)) 
                      * glm::rotate(mat4(1.0), ox, glm::vec3(1,0,0)) 
                      * glm::rotate(mat4(1.0), oy, glm::vec3(0,0,1));
@@ -192,7 +192,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
  //   std::cout << ex << " " << ey << std::endl;
     if(ball==0)
     {
-        glCullFace(GL_BACK);
+        glCullFace(GL_FRONT);
       for(int i = max(ex-3,0); i<= min(ex+3,360) ;i++)
         for(int j=max(ey-3,0); j<= min(ey+3,180); j++)
         {
@@ -217,8 +217,8 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     else
     {
         glCullFace(GL_FRONT);
-      for(int i=edges[0].second-18+180; i<edges[0].second+18+180;i++)
-        for(int j=edges[0].first-13+90; j<edges[0].first+5+90;j++)
+      for(int i=/*edges[0].second+180+*/0; i</*edges[0].second+18*/360;i++)
+        for(int j=/*edges[0].first+90+*/0; j</*edges[0].first+90*/180;j++)
         {
 
           glUniform1i(EdgexIDs[ball], (i-180));
@@ -228,7 +228,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
           if(piece_map[i][j]==-1)
           {
             point=vBOsize-1;
-            draw(vaoObjects[point], vBOs[point], iBOs[8], nOIs[8]);
+            draw(vaoObjects[point], vBOs[point], iBOs[maxLoD-1], nOIs[maxLoD-1]);
           }
           else
           {

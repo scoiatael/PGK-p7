@@ -1,13 +1,13 @@
-#version 120
-attribute vec3 vertexPosition;
+#version 330 core
+layout(location=0) in vec3 vertexPosition;
 uniform mat4 MVP;
 uniform int Edgex;
 uniform int Edgey;
 uniform int side;
 uniform float time;
 
-varying vec3 coords;
-varying float dotpr;
+out vec3 coords;
+out float dotpr;
 
 void main()
 {	
