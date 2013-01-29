@@ -31,7 +31,7 @@ int main( int argc, char** argv )
   GLuint MatrixIDs[2] = {glGetUniformLocation(programIDs[0], "MVP"), glGetUniformLocation(programIDs[1], "MVP")};
   GLuint EdgexIDs[2] = {glGetUniformLocation(programIDs[0], "Edgex"), glGetUniformLocation(programIDs[1], "Edgex")};
   GLuint EdgeyIDs[2] = {glGetUniformLocation(programIDs[0], "Edgey"), glGetUniformLocation(programIDs[1], "Edgey")};
-  GLuint SideIDs[2] = {glGetUniformLocation(programIDs[0], "side"), glGetUniformLocation(programIDs[1], "side")};
+  GLuint HeightIDs[2] = {glGetUniformLocation(programIDs[0], "height"), glGetUniformLocation(programIDs[1], "height")};
   GLuint TextureIDs[2] = {glGetUniformLocation(programIDs[0], "tex2d"), glGetUniformLocation(programIDs[1], "tex2d")};
   GLuint TimeIDs[2] = {glGetUniformLocation(programIDs[0], "time"), glGetUniformLocation(programIDs[1], "time")};
   GLuint AlphaIDs[2] = {glGetUniformLocation(programIDs[0], "alpha"), glGetUniformLocation(programIDs[1], "alpha")};
@@ -56,6 +56,23 @@ int main( int argc, char** argv )
   glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_RED_TYPE, &minlod);
   glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_GREEN_TYPE, &maxlod);
   std::cout << "Params: " << minlod << " " << maxlod << std::endl;
+  char texNameCl[] = "textureClouds.jpg";
+  GLuint tex_clouds = SOIL_load_OGL_texture
+  (
+    texNameCl,
+    SOIL_LOAD_AUTO,
+    SOIL_CREATE_NEW_ID,
+    SOIL_FLAG_INVERT_Y
+  );
+  if(tex_clouds == 0)
+    std::cerr << "SOIL loading error: '" << SOIL_last_result() << "' (" << texNameCl << ")" << std::endl;
+  else
+    std::cout << "Done.\n";
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, tex_clouds);
+  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_RED_TYPE, &minlod);
+  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_GREEN_TYPE, &maxlod);
+  std::cout << "Params of " << texName << ": " << minlod << " " << maxlod << std::endl;
 
   const int side(1201);
   const int vBOsize(file_names.size());
@@ -176,17 +193,17 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
 
     // Use our shader
     glUseProgram(programIDs[ball]);
-
+    glm::mat4 Vw;
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
-    glm::mat4 Vw=MVP * glm::translate( mat4(1.0),vec3((-x + 6000)*ball,(-y - 6000)*ball,(z - 12000)*ball)) 
+    Vw=MVP * glm::translate( mat4(1.0),vec3((-x + 6000)*ball,(-y - 6000)*ball,(z - 12000)*ball)) 
                      * glm::rotate(mat4(1.0), oz, glm::vec3(0,1,0)) 
                      * glm::rotate(mat4(1.0), ox, glm::vec3(1,0,0)) 
                      * glm::rotate(mat4(1.0), oy, glm::vec3(0,0,1))
                      * glm::translate( mat4(1.0), vec3(-x*(1-ball), -y*(1-ball), z*(1-ball)));
     glUniformMatrix4fv(MatrixIDs[ball], 1, GL_FALSE, &Vw[0][0]);
     
-    glUniform1i(SideIDs[ball], side);
+    glUniform1i(HeightIDs[ball], 0);
     
     glUniform1f(TimeIDs[ball], glfwGetTime());
     glUniform1f(AlphaIDs[ball], (float)alpha*0.1);
@@ -247,6 +264,62 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
         }
     }
 
+
+    //CLOUDS
+
+    Vw=MVP * glm::translate( mat4(1.0),vec3((-x + 6000)*ball,(-y - 6000)*ball,(z - 12000)*ball)) 
+                     * glm::rotate(mat4(1.0), oz+(float)glfwGetTime(), glm::vec3(0,1,0)) 
+                     * glm::rotate(mat4(1.0), ox, glm::vec3(1,0,0)) 
+                     * glm::rotate(mat4(1.0), oy, glm::vec3(0,0,1))
+                     * glm::translate( mat4(1.0), vec3(-x*(1-ball), -y*(1-ball), z*(1-ball)));
+    glUniformMatrix4fv(MatrixIDs[ball], 1, GL_FALSE, &Vw[0][0]);
+    
+    glUniform1i(HeightIDs[ball], 100);
+    
+    glUniform1f(TimeIDs[ball], glfwGetTime());
+    glUniform1f(AlphaIDs[ball], 1.0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex_clouds);
+    glUniform1i(TextureIDs[ball], /*GL_TEXTURE0+*/0);
+
+    indexBufferObject=iBOs[iBOindex];
+    numberOfIndices=nOIs[iBOindex];
+
+ //   std::cout << ex << " " << ey << std::endl;
+    if(ball==0)
+    {
+        glCullFace(GL_FRONT);
+      for(int i = max(ex-3,0); i<= min(ex+3,360) ;i++)
+        for(int j=max(ey-3,0); j<= min(ey+3,180); j++)
+        {
+          glUniform1i(EdgexIDs[ball], (i-180));
+          glUniform1i(EdgeyIDs[ball], (j-90));
+          int point;
+          {
+            point=vBOsize-1;
+            draw(vaoObjects[point], vBOs[point], iBOs[maxLoD-1], nOIs[maxLoD-1]);
+          }
+
+        }
+    }
+    else
+    {
+        glCullFace(GL_FRONT);
+      for(int i=/*edges[0].second+180+*/0; i</*edges[0].second+18*/360;i++)
+        for(int j=/*edges[0].first+90+*/0; j<=/*edges[0].first+90*/180;j++)
+        {
+
+          glUniform1i(EdgexIDs[ball], (i-180));
+          glUniform1i(EdgeyIDs[ball], (j-90));
+
+          int point;
+          {
+            point=vBOsize-1;
+            draw(vaoObjects[point], vBOs[point], iBOs[maxLoD-1], nOIs[maxLoD-1]);
+          }
+        }
+    }
     // Swap buffers
     glfwSwapBuffers();
 

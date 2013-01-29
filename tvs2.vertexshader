@@ -3,9 +3,9 @@ layout(location=0) in vec3 vertexPosition;
 uniform mat4 MVP;
 uniform int Edgex;
 uniform int Edgey;
-uniform int side;
+uniform int height;
 uniform float time;
-
+int side = 1201;
 out vec3 coords;
 out float dotpr;
 
@@ -16,7 +16,7 @@ void main()
   vec3 temp = vertexPosition;
   float lon = Edgex+temp.x/(side-5),
           lat = -Edgey+temp.y/(side-5),
-          R = 6400+temp.z/100;
+          R = 6400+temp.z/100+height;
 //  dotpr = (dot(normalize(vec2(lon, lat)), normalize(vec2(time - lon*M_PI/180, 23)))+0.5);
     dotpr = max(min((cos(time - lon*M_PI/180)+1.0)/2+0.5, 1.0),0.0);
 //  dotpr = dot((vec2(lat,lon)),(vec2(0, time)))/length(vec2(lat, lon-time))/2+0.5;
