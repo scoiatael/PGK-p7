@@ -10,7 +10,7 @@ uniform float alpha;
 out vec4 colorF;
 
 void main(){
-  vec4 temp = texture2D(tex2d, vec2(coords.x, coords.y));
+  vec4 temp = texture2D(tex2d, vec2(coords.x, 1-coords.y));
   vec3 color;
   float ht = coords.z;
    if            (ht < 0.0  )   color = vec3(0.0,          0.0,          1.0); //blue

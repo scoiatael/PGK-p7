@@ -51,6 +51,7 @@ void InitGraphics()
 		exit(-1);
 	}
 
+    glewExperimental = GL_TRUE;
 	// Initialize GLEW
 	if (glewInit() != GLEW_OK) {
 		fprintf(stderr, "Failed to initialize GLEW\n");

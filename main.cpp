@@ -36,47 +36,39 @@ int main( int argc, char** argv )
   GLuint TimeIDs[2] = {glGetUniformLocation(programIDs[0], "time"), glGetUniformLocation(programIDs[1], "time")};
   GLuint AlphaIDs[2] = {glGetUniformLocation(programIDs[0], "alpha"), glGetUniformLocation(programIDs[1], "alpha")};
   std::cout << "Got uniforms..\n";
-  
+  std::cout << glGetString(GL_VERSION) << std::endl;
+ 
   std::cout << "Loadin textures...\n";
+
   char texName[] = "texture3.jpg";
-  GLuint tex_2d = SOIL_load_OGL_texture
-  (
-    texName,
-    SOIL_LOAD_AUTO,
-    SOIL_CREATE_NEW_ID,
-    SOIL_FLAG_INVERT_Y
-  );
-  if(tex_2d == 0)
-    std::cerr << "SOIL loading error: '" << SOIL_last_result() << "' (" << texName << ")" << std::endl;
-  else
-    std::cout << "Done.\n";
-  int minlod, maxlod;
-  glActiveTexture(GL_TEXTURE0);
+  std::cout << texName << std::endl;
+  int t1x,t1y,t1comp;
+  FILE* t1f = fopen(texName, "rb");
+  unsigned char* tex1data = stbi_load_from_file(t1f, &t1x, &t1y, &t1comp,0);
+  unsigned int tex_2d;
+  glGenTextures(1, &tex_2d);
   glBindTexture(GL_TEXTURE_2D, tex_2d);
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_RED_TYPE, &minlod);
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_GREEN_TYPE, &maxlod);
-  std::cout << "Params: " << minlod << " " << maxlod << std::endl;
-  char texNameCl[] = "textureClouds.jpg";
-  GLuint tex_clouds = SOIL_load_OGL_texture
-  (
-    texNameCl,
-    SOIL_LOAD_AUTO,
-    SOIL_CREATE_NEW_ID,
-    SOIL_FLAG_INVERT_Y
-  );
-  if(tex_clouds == 0)
-    std::cerr << "SOIL loading error: '" << SOIL_last_result() << "' (" << texNameCl << ")" << std::endl;
-  else
-    std::cout << "Done.\n";
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, tex_clouds);
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_RED_TYPE, &minlod);
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_GREEN_TYPE, &maxlod);
-  std::cout << "Params of " << texName << ": " << minlod << " " << maxlod << std::endl;
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t1x, t1y, 0, GL_RGB, GL_UNSIGNED_BYTE, tex1data);
+/*
+  char texNameCl[] = "textureClouds3.png";
+  std::cout << texNameCl << std::endl;
+  int t2x,t2y,t2comp;
+  FILE* t2f = fopen(texNameCl, "rb");
+  unsigned char* tex2data = stbi_load_from_file  (t2f, &t2x, &t2y, &t2comp,0);
+  unsigned int tex_cl;
+  glGenTextures(1, &tex_cl);
+  glBindTexture(GL_TEXTURE_2D, tex_cl);
+  //-->
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t2x, t2y, 0, GL_RGB, GL_UNSIGNED_BYTE, tex2data);
+*/
+  std::cout << "Done!\n";
 
   const int side(1201);
   const int vBOsize(file_names.size());
-
 
 
   //Vertices:
@@ -87,9 +79,13 @@ int main( int argc, char** argv )
   unsigned int numberOfVertices=side*side;
   GLuint vaoObjects[vBOsize+1], vertexBufferObject, vBOs[vBOsize+1];
   std::vector<std::pair<int, int> > edges(vBOsize+1);
-  glGenVertexArrays(vBOsize+1, vaoObjects);
-  glGenBuffers(vBOsize+1, vBOs);
+  // -->
+  std::cout << "Generating arrays...\n";
+  glGenVertexArrays(vBOsize, vaoObjects);
+  std::cout << "Done\n";
+  glGenBuffers(vBOsize, vBOs);
   int height;
+  // <---
   for(short i=0; i< vBOsize;i++)
   {
     std::vector< int > vertexPositionsVec(3*numberOfVertices);
@@ -266,7 +262,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
 
 
     //CLOUDS
-
+/*
     Vw=MVP * glm::translate( mat4(1.0),vec3((-x + 6000)*ball,(-y - 6000)*ball,(z - 12000)*ball)) 
                      * glm::rotate(mat4(1.0), oz+(float)glfwGetTime(), glm::vec3(0,1,0)) 
                      * glm::rotate(mat4(1.0), ox, glm::vec3(1,0,0)) 
@@ -277,11 +273,11 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     glUniform1i(HeightIDs[ball], 100);
     
     glUniform1f(TimeIDs[ball], glfwGetTime());
-    glUniform1f(AlphaIDs[ball], 1.0);
+    glUniform1f(AlphaIDs[ball], 0.25);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, tex_clouds);
-    glUniform1i(TextureIDs[ball], /*GL_TEXTURE0+*/0);
+    glBindTexture(GL_TEXTURE_2D, tex_cl);
+    glUniform1i(TextureIDs[ball], 0);
 
     indexBufferObject=iBOs[iBOindex];
     numberOfIndices=nOIs[iBOindex];
@@ -306,8 +302,8 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
     else
     {
         glCullFace(GL_FRONT);
-      for(int i=/*edges[0].second+180+*/0; i</*edges[0].second+18*/360;i++)
-        for(int j=/*edges[0].first+90+*/0; j<=/*edges[0].first+90*/180;j++)
+      for(int i=0; i<360;i++)
+        for(int j=0; j<=180;j++)
         {
 
           glUniform1i(EdgexIDs[ball], (i-180));
@@ -319,7 +315,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
             draw(vaoObjects[point], vBOs[point], iBOs[maxLoD-1], nOIs[maxLoD-1]);
           }
         }
-    }
+    }*/
     // Swap buffers
     glfwSwapBuffers();
 
@@ -330,7 +326,7 @@ glm::perspective(45.0f, 4.0f / 3.0f, 100.f, 30000.0f);
   // Cleanup VBO and shader
   glDeleteProgram(programIDs[0]);
   glDeleteProgram(programIDs[1]);
-  CleanVBOs(vaoObjects, vBOs, vBOsize+1, iBOs, tex_2d);
+//  CleanVBOs(vaoObjects, vBOs, vBOsize+1, iBOs, tex_2d);
 
   std::cout << "Cleaning done, terminating..\n";
   // Close OpenGL window and terminate GLFW

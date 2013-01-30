@@ -11,6 +11,7 @@
 
 // Include GLFW
 #include <GL/glfw.h>
+#include "stb_image.h"
 
 // Include GLM
 #include <glm/glm.hpp>

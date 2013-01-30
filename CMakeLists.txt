@@ -24,7 +24,8 @@ include_directories(
   .
 )
 
-#link_directories(${CMAKE_SOURCE_DIR})
+link_directories(${CMAKE_SOURCE_DIR}/lib)
+#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} ${CMAKE_SOURCE_DIR})
 
 set(ALL_LIBS
 	${OPENGL_LIBRARY}
@@ -47,6 +48,7 @@ add_executable(p7
 	implementacje.cpp
 	common/shader.cpp
 	common/shader.hpp
+    stb_image.c
 )
 
 target_link_libraries(p7
