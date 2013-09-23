@@ -31,7 +31,6 @@ set(ALL_LIBS
 	${OPENGL_LIBRARY}
 	GLFW_276
   GLEW_190
-  SOIL
 )
 
 add_definitions(
